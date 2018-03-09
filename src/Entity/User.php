@@ -1,18 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Apolskis Linas
- * Date: 3/9/2018
- * Time: 10:20 PM
- */
 
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Table(name="app_users")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface, \Serializable
@@ -33,6 +28,8 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="string", length=64)
      */
     private $password;
+
+    private $plainPassword;
 
     /**
      * @ORM\Column(type="string", length=254, unique=true)
@@ -63,6 +60,16 @@ class User implements UserInterface, \Serializable
         return null;
     }
 
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
     public function getPassword()
     {
         return $this->password;
@@ -75,6 +82,26 @@ class User implements UserInterface, \Serializable
 
     public function eraseCredentials()
     {
+    }
+
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
+    }
+
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
     }
 
     /** @see \Serializable::serialize() */
