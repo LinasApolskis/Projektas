@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+
+        {% for car in cars %}
+        {{ dump(car) }}
+        {%  endfor %}
+
+    {{ form_start(form) }}
+    {{ form_row(form.brand) }}
+    {{ form_row(form.model) }}
+    {{ form_row(form.licence) }}
+    {{ form_row(form.year) }}
+    {{ form_row(form.body) }}
+    {{ form_row(form.fuel) }}
+    {{ form_row(form.power) }}
+    {{ form_row(form.engine) }}
+    {{ form_row(form.gearbox) }}
+    {{ form_row(form.mileage) }}
+
+    <button type="submit">Register new car!</button>
+    {{ form_end(form) }}
+{% endblock %}
