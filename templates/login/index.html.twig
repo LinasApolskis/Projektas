@@ -22,5 +22,11 @@
 
         <button type="submit">login</button>
     </form>
-        <a class="nav-link" href="{{ path('resetpassword') }}">Forgot your password?</a>
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice">
+             <span style="color: green; ">
+            {{ message }}
+            </span>
+        </div>
+    {% endfor %}
 {% endblock %}
