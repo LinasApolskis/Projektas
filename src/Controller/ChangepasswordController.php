@@ -17,7 +17,6 @@ class ChangepasswordController extends Controller
     public function changepasswordAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         // 1) build the form
-        $user = new User();
         $usernam = $this->get('security.token_storage')->getToken()->getUser();
         $entityManager = $this->getDoctrine()->getManager();
         $user = $entityManager->getRepository(User::class)->find($usernam);

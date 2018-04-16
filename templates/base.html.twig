@@ -25,18 +25,34 @@
 
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav mr-auto">
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED')== false %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('login') }}">Login</a>
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('register') }}">Registration</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('logout') }}">Logout</a>
-                    </li>
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('changepassword') }}">Change Password</a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('profile') }}">My profile</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('carregister') }}">Cars</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('visit') }}">Visits</a>
+                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('logout') }}">Logout</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

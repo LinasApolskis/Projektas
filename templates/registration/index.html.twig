@@ -11,6 +11,15 @@
     {{ form_row(form.plainPassword.second) }}
 
     <button type="submit">Register!</button>
-    {{ form_end(form) }}
+    <div class="g-recaptcha" data-sitekey="6LffeFMUAAAAALh5FezVSsN9w9zrRON3796BE0So"></div>
 
+    {% for message in app.flashes('error') %}
+        <div class="flash-error">
+            <span style="color: red; ">
+            {{ message }}
+            </span>
+        </div>
+    {% endfor %}
+    {{ form_end(form) }}
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 {% endblock %}

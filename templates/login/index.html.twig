@@ -22,4 +22,11 @@
 
         <button type="submit">login</button>
     </form>
+    {% for message in app.flashes('notice') %}
+        <div class="flash-notice">
+             <span style="color: green; ">
+            {{ message }}
+            </span>
+        </div>
+    {% endfor %}
 {% endblock %}
