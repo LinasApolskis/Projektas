@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block main %}
+
+
+    <table class="table table-striped table-middle-aligned">
+        <thead>
+        <tr>
+            <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
+            <th{% if pagination.isSorted('username') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Username', 'a.username') }}</th>
+            <th>{{ knp_pagination_sortable(pagination, 'Email', 'a.email') }}</th>
+            <th>{{ knp_pagination_sortable(pagination, 'Roles', 'a.roles') }}</th>
+            <th>{{ knp_pagination_sortable(pagination, 'Active', 'a.isActive') }}</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in pagination %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% if "ROLE_ADMIN" in user.roles %}
+                        Admin
+                        {% else %}
+                        User
+                    {% endif %}
+                </td>
+                <td>{% if user.isEnabled %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <a href="{{ path('admin_role_user', { 'id': user.id }) }}">
+                    <svg id="i-settings" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <path d="M13 2 L13 6 11 7 8 4 4 8 7 11 6 13 2 13 2 19 6 19 7 21 4 24 8 28 11 25 13 26 13 30 19 30 19 26 21 25 24 28 28 24 25 21 26 19 30 19 30 13 26 13 25 11 28 8 24 4 21 7 19 6 19 2 Z" />
+                        <circle cx="16" cy="16" r="4" />
+                    </svg></a>
+                    <a href="{{ path('admin_status_user', { 'id': user.id }) }}">
+                    <svg id="i-ban" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <circle cx="16" cy="16" r="14" />
+                        <path d="M6 6 L26 26" />
+                    </svg></a>
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" align="center">Users not found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+{% endblock %}

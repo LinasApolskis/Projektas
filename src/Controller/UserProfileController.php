@@ -4,44 +4,37 @@ namespace App\Controller;
 
 use App\Entity\UserProfile;
 use App\Form\UserProfileType;
-use App\Entity\User;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class UserProfileController extends Controller
 {
+
     /**
-     * @Route("/profile", name="profile")
+     *
+     * @Route("profile/{id}/edit", name="profile")
+     * @Method({"GET", "POST"})
      */
-    public function updateAction(Request $request)
+    public function editProfileAction(Request $request, UserProfile $profile): Response
     {
 
-        $profile = new UserProfile();
         $form = $this->createForm(UserProfileType::class, $profile);
-        $username = $this->get('security.token_storage')->getToken()->getUser();
-        $entityManager = $this->getDoctrine()->getManager();
-        $user = $entityManager->getRepository(User::class)->find($username);
-
-        $profile -> setUsername($user->getUsername());
-        // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash('success', 'Profile edited');
 
-            // 4) save the User!
-            $entityManager->merge($profile);
-            $entityManager->flush();
-
-            // ... do any other work - like sending them an email, etc
-            // maybe set a "flash" success message for the user
-
+            return $this->redirectToRoute('index');
         }
 
-        return $this->render(
-            'user_profile/index.html.twig',
-            array('form' => $form->createView())
-        );
+        return $this->render('web/profile.html.twig', [
+            'profile' => $profile,
+            'form' => $form->createView(),
+        ]);
     }
 }
