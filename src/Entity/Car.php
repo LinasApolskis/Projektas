@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,11 +17,6 @@ class Car
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="string", length=25)
-     */
-    private $username;
 
     /**
      * @ORM\Column(type="string", length=25, unique=true)
@@ -71,13 +68,34 @@ class Car
      */
     private $mileage;
 
-    public function getUsername()
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Visit", mappedBy="car_id", orphanRemoval=true)
+     */
+    private $visits;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default":0})
+     */
+    private $serviced;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Service", inversedBy="cars")
+     */
+    private $services;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="cars")
+     */
+    private $user;
+
+    public function __construct()
     {
-        return $this->username;
+        $this->visits = new ArrayCollection();
+        $this->services = new ArrayCollection();
     }
-    public function setUsername($username)
+    public function getID()
     {
-        $this->username = $username;
+        return $this->id;
     }
     public function getLicence()
     {
@@ -158,6 +176,87 @@ class Car
     public function setGearbox($gearbox)
     {
         $this->gearbox = $gearbox;
+    }
+
+    /**
+     * @return Collection|Visit[]
+     */
+    public function getVisits(): Collection
+    {
+        return $this->visits;
+    }
+
+    public function addVisit(Visit $visit): self
+    {
+        if (!$this->visits->contains($visit)) {
+            $this->visits[] = $visit;
+            $visit->setCarId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVisit(Visit $visit): self
+    {
+        if ($this->visits->contains($visit)) {
+            $this->visits->removeElement($visit);
+            // set the owning side to null (unless already changed)
+            if ($visit->getCarId() === $this) {
+                $visit->setCarId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getServiced(): ?bool
+    {
+        return $this->serviced;
+    }
+
+    public function setServiced(bool $serviced): self
+    {
+        $this->serviced = $serviced;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Service[]
+     */
+    public function getServices(): Collection
+    {
+        return $this->services;
+    }
+
+    public function addService(Service $service): self
+    {
+        if (!$this->services->contains($service)) {
+            $this->services[] = $service;
+        }
+
+        return $this;
+    }
+
+    public function removeService(Service $service): self
+    {
+        if ($this->services->contains($service)) {
+            $this->services->removeElement($service);
+        }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
     // add your own fields
 }

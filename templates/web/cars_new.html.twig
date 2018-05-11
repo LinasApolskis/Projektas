@@ -2,10 +2,6 @@
 
 {% block main %}
 
-        {% for car in cars %}
-        {{ dump(car) }}
-        {%  endfor %}
-
     {{ form_start(form) }}
     {{ form_row(form.brand) }}
     {{ form_row(form.model) }}
