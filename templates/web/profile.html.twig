@@ -9,6 +9,7 @@
     {{ form_row(form.address) }}
     {{ form_row(form.phone) }}
 
-    <button type="submit">Update details!</button>
+    <button type="submit" class="btn btn-outline-primary">Update details!</button>
+    <a href="{{ path('changepassword') }}" class="btn btn-outline-primary" role="button">Change Password?</a>
     {{ form_end(form) }}
 {% endblock %}
