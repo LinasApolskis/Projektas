@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -40,6 +42,28 @@ class User implements AdvancedUserInterface, \Serializable
      */
     private $isActive;
 
+    /**
+     * @var array
+     *
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Visit", mappedBy="user_id")
+     */
+    private $visits;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\UserProfile", mappedBy="user_id", cascade={"persist", "remove"})
+     */
+    private $Profile;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Car", mappedBy="user")
+     */
+    private $cars;
+
     public function isAccountNonExpired()
     {
         return true;
@@ -60,13 +84,27 @@ class User implements AdvancedUserInterface, \Serializable
         return $this->isActive;
     }
 
+    public function deactivate()
+    {
+        return $this->isActive = false;
+    }
+
+    public function activate()
+    {
+        return $this->isActive = true;
+    }
     public function __construct()
     {
         $this->isActive = true;
-        // may not be needed, see section on salt below
-        // $this->salt = md5(uniqid('', true));
+        $this->roles[] = 'ROLE_USER';
+        $this->visits = new ArrayCollection();
+        $this->cars = new ArrayCollection();
     }
 
+    public function getID()
+    {
+        return $this->id;
+    }
     public function getUsername()
     {
         return $this->username;
@@ -88,15 +126,31 @@ class User implements AdvancedUserInterface, \Serializable
     {
         $this->email = $email;
     }
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+
+        // guarantees that a user always has at least one role for security
+        if (empty($roles)) {
+            $roles[] = 'ROLE_USER';
+        }
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
+    }
+
+    public function resetRoles()
+    {
+        $this->roles = [];
+    }
 
     public function getPassword()
     {
         return $this->password;
-    }
-
-    public function getRoles()
-    {
-        return array('ROLE_USER');
     }
 
     public function eraseCredentials()
@@ -147,5 +201,84 @@ class User implements AdvancedUserInterface, \Serializable
             // see section on salt below
             // $this->salt
             ) = unserialize($serialized);
+    }
+
+    /**
+     * @return Collection|Visit[]
+     */
+    public function getVisits(): Collection
+    {
+        return $this->visits;
+    }
+
+    public function addVisit(Visit $visit): self
+    {
+        if (!$this->visits->contains($visit)) {
+            $this->visits[] = $visit;
+            $visit->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVisit(Visit $visit): self
+    {
+        if ($this->visits->contains($visit)) {
+            $this->visits->removeElement($visit);
+            // set the owning side to null (unless already changed)
+            if ($visit->getUserId() === $this) {
+                $visit->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getProfile(): ?UserProfile
+    {
+        return $this->Profile;
+    }
+
+    public function setProfile(UserProfile $Profile): self
+    {
+        $this->Profile = $Profile;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $Profile->getUserId()) {
+            $Profile->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Car[]
+     */
+    public function getCars(): Collection
+    {
+        return $this->cars;
+    }
+
+    public function addCar(Car $car): self
+    {
+        if (!$this->cars->contains($car)) {
+            $this->cars[] = $car;
+            $car->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCar(Car $car): self
+    {
+        if ($this->cars->contains($car)) {
+            $this->cars->removeElement($car);
+            // set the owning side to null (unless already changed)
+            if ($car->getUser() === $this) {
+                $car->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

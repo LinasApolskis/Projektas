@@ -15,35 +15,25 @@ class Visit
      * @ORM\Column(type="integer")
      */
     private $id;
-    /**
-     * @ORM\Column(type="string", length=25)
-     */
-    private $username;
-    /**
-     * @ORM\Column(type="string", length=25)
-     */
-    private $licencenumber;
+
     /**
      * @ORM\Column(type="datetime")
      */
     private $date;
 
-    public function getUsername()
-    {
-        return $this->username;
-    }
-    public function setUsername($username)
-    {
-        $this->username = $username;
-    }
-    public function getLicence()
-    {
-        return $this->licencenumber;
-    }
-    public function setLicence($licencenumber)
-    {
-        $this->licencenumber = $licencenumber;
-    }
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Car", inversedBy="visits")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $car_id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="visits")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user_id;
+
+    
     public function getDate()
     {
         return $this->date;
@@ -52,5 +42,29 @@ class Visit
     {
         $this->username = $date;
     }
-    // add your own fields
+
+    public function getCarId(): ?Car
+    {
+        return $this->car_id;
+    }
+
+    public function setCarId(?Car $car_id): self
+    {
+        $this->car_id = $car_id;
+
+        return $this;
+    }
+
+    public function getUserId(): ?User
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(?User $user_id): self
+    {
+        $this->user_id = $user_id;
+
+        return $this;
+    }
+
 }

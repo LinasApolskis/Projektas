@@ -7,20 +7,16 @@
         <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
+
     <form action="{{ path('login') }}" method="post">
         <label for="username">Username or email:</label>
-        <input type="text" id="username" name="_username" value="{{ last_username }}" />
+        <input type="text" id="username" name="_username" class="form-control" placeholder="Username or Email" value="{{ last_username }}" />
 
         <label for="password">Password:</label>
-        <input type="password" id="password" name="_password" />
+        <input type="password" id="password" name="_password" class="form-control" placeholder="Password" />
 
-        {#
-            If you want to control the URL the user
-            is redirected to on success (more details below)
-            <input type="hidden" name="_target_path" value="/account" />
-        #}
-
-        <button type="submit">login</button>
+    <br>
+        <button class="btn btn-primary" type="submit">login</button>
     </form>
     {% for message in app.flashes('notice') %}
         <div class="flash-notice">

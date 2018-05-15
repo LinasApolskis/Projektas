@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\UserProfile;
 use App\Form\UserType;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,13 +23,15 @@ class RegistrationController extends Controller
 
         // 2) handle the submit (will only happen on POST) + captcha check
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid() && $this->captchaverify($request->get('g-recaptcha-response'))) {
-
+        //if ($form->isSubmitted() && $form->isValid() && $this->captchaverify($request->get('g-recaptcha-response'))) {
+            if ($form->isSubmitted() && $form->isValid()) {
             // 3) Encode the password (you could also do this via Doctrine listener)
             $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
 
             // 4) save the User!
+            $profile = new UserProfile();
+            $user->setProfile($profile);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -52,7 +55,7 @@ class RegistrationController extends Controller
         }
 
         return $this->render(
-            'registration/index.html.twig',
+            'web/register.html.twig',
             array('form' => $form->createView())
         );
 
