@@ -4,11 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Car;
 use App\Form\CarType;
-use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class CarController extends Controller
 {
@@ -18,8 +18,6 @@ class CarController extends Controller
      */
     public function carListAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        //$users = $entityManager->getRepository(User::class)->findAll();
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $cars = $user->getCars();
         $paginator = $this->get('knp_paginator');
@@ -48,9 +46,6 @@ class CarController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $car->setServiced(0);
-            // 4) save the User!
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-            $user->addCar($car);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($car);
             $entityManager->flush();
@@ -68,7 +63,29 @@ class CarController extends Controller
             'web/cars_new.html.twig',
             array('form' => $form->createView())
         );
+    }
+    /**
+     *
+     * @Route("/cars/{id}/edit", name="car_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editServiceAction(Request $request, Car $car): Response
+    {
 
+        $form = $this->createForm(CarType::class, $car);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Service edited');
+
+            return $this->redirectToRoute('car_list');
+        }
+
+        return $this->render('web/cars_new.html.twig', [
+            'car' => $car,
+            'form' => $form->createView(),
+        ]);
     }
 }

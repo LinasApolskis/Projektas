@@ -2,12 +2,8 @@
 
 {% block main %}
 
-    {% for visit in visits %}
-        {{ dump(visit) }}
-    {%  endfor %}
-
     {{ form_start(form) }}
-    {{ form_row(form.licence) }}
+    {{ form_row(form.car_id) }}
     {{ form_row(form.date) }}
 
     <button type="submit">Register for a visit!</button>
