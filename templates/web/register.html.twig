@@ -2,6 +2,8 @@
 
 {% block title %}Registration{% endblock %}
 
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
 {% block main %}
 
     {{ form_start(form) }}
@@ -11,7 +13,7 @@
     {{ form_row(form.plainPassword.second) }}
 
     <button type="submit">Register!</button>
-    <div class="g-recaptcha" data-sitekey="6LffeFMUAAAAALh5FezVSsN9w9zrRON3796BE0So"></div>
+    <div class="g-recaptcha" data-sitekey="6Lc3m1gUAAAAANI-IwJgJSnF0QUdv5xShXQVX9kT"></div>
 
     {% for message in app.flashes('error') %}
         <div class="flash-error">

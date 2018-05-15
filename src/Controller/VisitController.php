@@ -36,7 +36,7 @@ class VisitController extends Controller
             $entityManager->flush();
         }
         return $this->render(
-            'visit/index.html.twig',
+            'web/visit.html.twig',
             array('visits' => $visits, 'form' => $form->createView())
         );
     }

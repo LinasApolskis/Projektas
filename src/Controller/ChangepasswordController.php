@@ -43,7 +43,7 @@ class ChangepasswordController extends Controller
         }
 
         return $this->render(
-            'changepassword/index.html.twig',
+            'web/changepassword.html.twig',
             array('forma' => $forma->createView())
         );
     }

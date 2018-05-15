@@ -11,12 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 class UserProfile
 {
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
-     * @ORM\Id
-     */
-    private $username;
-
-    /**
      * @ORM\Column(type="string", length=25)
      */
 
@@ -41,14 +35,13 @@ class UserProfile
      */
 
     private $surname;
-    public function getUsername()
-    {
-        return $this->username;
-    }
-    public function setUsername($username)
-    {
-        $this->username = $username;
-    }
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="Profile", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     * @ORM\Id
+     */
+    private $user_id;
     public function getCity()
     {
         return $this->city;
@@ -88,6 +81,18 @@ class UserProfile
     public function setSurname($surname)
     {
         $this->surname = $surname;
+    }
+
+    public function getUserId(): ?User
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(User $user_id): self
+    {
+        $this->user_id = $user_id;
+
+        return $this;
     }
     // add your own fields
 }
