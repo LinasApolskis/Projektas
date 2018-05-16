@@ -20,7 +20,7 @@
         {% for visit in pagination %}
             <tr>
                 <td>{{ visit.id }}</td>
-                <td>{{ visit.date|date('Y-m-d H:i:s') }}</td>
+                <td>{{ visit.date|date('Y-m-d H:i') }}</td>
                 <td>{{ visit.getCarId().licence }}</td>
                 <td>{{ visit.getUserId().username }}</td>
                 <td>{% if visit.getCarId().getServiced() %}<p class="text-primary"><strong>	Done</strong></p>{% else %}<a href="{{ path('admin_visits_serviced', { 'id': visit.getCarId().id }) }}">
@@ -28,9 +28,9 @@
                                 <path d="M2 20 L12 28 30 4" />
                             </svg></a>{% endif %}</td>
                 <td>
-                <a href="{{ path('admin_visits_serviced', { 'id': visit.getCarId().id }) }}">
+                <a href="{{ path('admin_visits_services', { 'id': visit.getCarId().id }) }}">
                     <svg id="i-checkmark" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                        <path d="M2 20 L12 28 30 4" />
+                        <path d="M 18.92 5.01 C 18.72 4.42 18.16 4 17.5 4 h -11 c -0.66 0 -1.21 0.42 -1.42 1.01 L 3 11 v 8 c 0 0.55 0.45 1 1 1 h 1 c 0.55 0 1 -0.45 1 -1 v -1 h 12 v 1 c 0 0.55 0.45 1 1 1 h 1 c 0.55 0 1 -0.45 1 -1 v -8 l -2.08 -5.99 Z M 6.5 15 c -0.83 0 -1.5 -0.67 -1.5 -1.5 S 5.67 12 6.5 12 s 1.5 0.67 1.5 1.5 S 7.33 15 6.5 15 Z m 11 0 c -0.83 0 -1.5 -0.67 -1.5 -1.5 s 0.67 -1.5 1.5 -1.5 s 1.5 0.67 1.5 1.5 s -0.67 1.5 -1.5 1.5 Z M 5 10 l 1.5 -4.5 h 11 L 19 10 H 5 Z" />
                     </svg></a></td>
 
                 </td>

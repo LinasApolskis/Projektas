@@ -23,16 +23,9 @@ class CarServiceType extends AbstractType
                 'choice_label' => 'name',
 
                 // used to render a select box, check boxes or radios
-                // 'multiple' => true,
-                // 'expanded' => true,
+                'multiple' => true,
+                'expanded' => true,
             ))
         ;
-    }
-
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'data_class' => Car::class,
-        ]);
     }
 }

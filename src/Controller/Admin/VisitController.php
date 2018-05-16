@@ -51,23 +51,27 @@ class VisitController extends Controller
 
     /**
      *
-     * @Route("/admin/visits/Select/", name="admin_visits_services")
-     * @Method("GET")
+     * @Route("/admin/visits/select/{id}", name="admin_visits_services")
+     * @Method({"GET", "POST"})
      */
-    public function addServicesToVisit( Request $request)
+    public function addServicesToVisit(Car $car, Request $request)
     {
         // 1) build the form
-        $service = new Service();
-        $form = $this->createForm(CarServiceType::class, $service);
+        $form = $this->createForm(CarServiceType::class);
 
         // 2) handle the submit (will only happen on POST) + captcha check
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $services = $form -> getData();
+            foreach($services as $service){
+                foreach($service as $key)
+                $car -> addService($key);
+            }
 
 
             // 4) save the User!
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($service);
+            $entityManager->persist($car);
             $entityManager->flush();
 
             // ... do any other work - like sending them an email, etc
@@ -76,7 +80,7 @@ class VisitController extends Controller
                 'notice',
                 'Service created successfully'
             );
-            return $this->redirectToRoute('admin_service_list');
+            return $this->redirectToRoute('admin_visits');
         }
 
 
