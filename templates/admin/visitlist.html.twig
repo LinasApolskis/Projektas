@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block main %}
+
+
+    <table class="table table-striped table-middle-aligned">
+        <thead>
+        <tr>
+            <th>{{ knp_pagination_sortable(pagination, 'Id', 'a.id') }}</th>
+            <th{% if pagination.isSorted('Date') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(pagination, 'Date', 'a.date') }}</th>
+            <th scope="col">Licence</th>
+            <th scope="col">Username</th>
+            <th scope="col">Serviced</th>
+            <th scope="col">Services</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for visit in pagination %}
+            <tr>
+                <td>{{ visit.id }}</td>
+                <td>{{ visit.date|date('Y-m-d H:i:s') }}</td>
+                <td>{{ visit.getCarId().licence }}</td>
+                <td>{{ visit.getUserId().username }}</td>
+                <td>{% if visit.getCarId().getServiced() %}<p class="text-primary"><strong>	Done</strong></p>{% else %}<a href="{{ path('admin_visits_serviced', { 'id': visit.getCarId().id }) }}">
+                            <svg id="i-checkmark" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                <path d="M2 20 L12 28 30 4" />
+                            </svg></a>{% endif %}</td>
+                <td>
+                <a href="{{ path('admin_visits_serviced', { 'id': visit.getCarId().id }) }}">
+                    <svg id="i-checkmark" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                        <path d="M2 20 L12 28 30 4" />
+                    </svg></a></td>
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4" align="center">Visits not found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+{% endblock %}
