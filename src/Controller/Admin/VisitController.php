@@ -58,7 +58,6 @@ class VisitController extends Controller
     {
         // 1) build the form
         $form = $this->createForm(CarServiceType::class);
-
         // 2) handle the submit (will only happen on POST) + captcha check
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

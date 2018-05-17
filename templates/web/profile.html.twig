@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseNew.html.twig' %}
 
 
 {% block main %}
@@ -9,7 +9,7 @@
     {{ form_row(form.address) }}
     {{ form_row(form.phone) }}
 
-    <button type="submit" class="btn btn-outline-primary">Update details!</button>
-    <a href="{{ path('changepassword') }}" class="btn btn-outline-primary" role="button">Change Password?</a>
+    <button type="submit" class="btn btn-primary">Update details!</button>
+    <a class="btn btn-primary" href="{{ path('changepassword') }}" role="button">Change Password?</a>
     {{ form_end(form) }}
 {% endblock %}
