@@ -214,13 +214,12 @@ class Car
         return $this->serviced;
     }
 
-    public function setServiced(bool $serviced): self
+    public function setServiced(): self
     {
-        $this->serviced = $serviced;
+        $this->serviced = true;
 
         return $this;
     }
-
     /**
      * @return Collection|Service[]
      */

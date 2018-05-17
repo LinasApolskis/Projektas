@@ -1,11 +1,8 @@
 {% extends 'baseNew.html.twig' %}
 
 {% block main %}
-
     {{ form_start(form) }}
-    {{ form_row(form.name) }}
-    {{ form_row(form.price) }}
-
-    <button type="submit">Edit service!</button>
+    {{ form_row(form.services) }}
+    <button type="submit">Register for a visit!</button>
     {{ form_end(form) }}
 {% endblock %}

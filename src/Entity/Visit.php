@@ -33,14 +33,17 @@ class Visit
      */
     private $user_id;
 
-    
+    public function getID()
+    {
+        return $this->id;
+    }
     public function getDate()
     {
         return $this->date;
     }
     public function setDate($date)
     {
-        $this->username = $date;
+        $this->date = $date;
     }
 
     public function getCarId(): ?Car

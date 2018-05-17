@@ -35,7 +35,7 @@ class CarController extends Controller
 
 
     /**
-     * @Route("/cars/new", name="carregister")
+     * @Route("/cars/new", name="car_new")
      */
     public function serviceCreateAction(Request $request)
     {
