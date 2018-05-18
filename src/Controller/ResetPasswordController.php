@@ -19,13 +19,14 @@ class ResetPasswordController extends Controller
     public function PasswordReset(Request $request, \Swift_Mailer $mailer, UserPasswordEncoderInterface $passwordEncoder)
     {
 
-        $error="";
+        $status = 0;
         $form = $this->createForm(resetPasswordType::class);
         $form->handleRequest($request);
         $email = $form -> getData();
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $email['email']]);
         if ($user)
         {
+            $status = true;
             $bytes = random_bytes(5);
             $newPassword = bin2hex($bytes);
             $password = $passwordEncoder->encodePassword($user, $newPassword);
@@ -51,24 +52,16 @@ class ResetPasswordController extends Controller
 
                 );
             $mailer->send($message);
-            $this->addFlash(
-                'notice',
-                'Email has been sent!'
-            );
         }
         else
-            $this->addFlash(
-                'notice',
-                'Your email was not found in our database'
-            );
+            $status = false;
         ;
 
 
 
         return $this->render('web/resetPassword.html.twig', [
             'form'=>$form->createView(),
-            'action' => "reset",
-            'error'=>$error,
+            'action' => $status
         ]);
     }
 

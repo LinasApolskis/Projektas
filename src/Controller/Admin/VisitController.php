@@ -39,13 +39,24 @@ class VisitController extends Controller
      * @Route("/admin/visits/{id}", name="admin_visits_serviced")
      * @Method("GET")
      */
-    public function statusServicedAction(Car $car)
+    public function statusServicedAction(Car $car, \Swift_Mailer $mailer)
     {
         $em = $this->getDoctrine()->getManager();
         //$user = $em->getRepository(User::class)->find($id);
         $car->setServiced();
         $em->persist($car);
         $em->flush();
+        $user = $car -> getUser();
+        $userEmail = $user -> getEmail();
+        $message = (new \Swift_Message('UAB FIX A CAR'))
+            ->setFrom('thelincius@gmail.com')
+            ->setTo($userEmail)
+            ->setBody('Your car has been serviced! We are waiting for you at our adress: Studentu g. 50');
+        $mailer->send($message);
+        $this->addFlash(
+            'notice',
+            'Email has been sent!'
+        );
         return $this->redirectToRoute('admin_visits');
     }
 
