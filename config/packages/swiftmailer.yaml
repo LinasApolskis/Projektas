@@ -1,3 +1,6 @@
+# See https://symfony.com/doc/current/email/dev_environment.html
+# use this to disable email delivery
+
 swiftmailer:
-    url: 'gmail://thelincius:apolskis@localhost'
+    url: 'gmail://thelincius@gmail.com:apolskis@localhost'
     spool: { type: 'memory' }

@@ -16,7 +16,8 @@
         <input type="password" id="password" name="_password" class="form-control" placeholder="Password" />
 
     <br>
-        <button class="btn btn-primary" type="submit">login</button>
+        <button type="submit" class="btn btn-primary">Login!</button>
+        <a class="btn btn-primary" href="{{ path('reset_password') }}" role="button">Forgot password?</a>
     </form>
     {% for message in app.flashes('notice') %}
         <div class="flash-notice">

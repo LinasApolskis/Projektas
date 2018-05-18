@@ -59,6 +59,7 @@
                 {% if is_granted('ROLE_ADMIN') %}
                 <p class="h3">Admin Menu</p>
                     <li> <a class="nav-link" href="{{ path('admin_visits') }}">Visits List</a> </li>
+                    <li> <a class="nav-link" href="{{ path('admin_list_user') }}">User List</a> </li>
                     <li>
                     <a href="#pageSubmenu3" data-toggle="collapse" aria-expanded="false">Service</a>
                     <ul class="collapse list-unstyled" id="pageSubmenu3">
