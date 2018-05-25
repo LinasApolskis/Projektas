@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CarRepository")
@@ -19,52 +20,72 @@ class Car
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
+     * @ORM\Column(type="string", length=255, nullable=false)
+     * @Assert\Regex(
+     *     pattern = "/\W+/",
+     *     match = false,
+     *     message = "Car number plate cannot contain special symbols."
+     * )
      */
     private $licencenumber;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", length=255, nullable=false)
+     * @Assert\Type("string")
      */
     private $brand;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", length=255, nullable=false)
+     * @Assert\Regex(
+     *     pattern = "/[\d\W]+/",
+     *     message = "Car model cannot contain digits or special character"
+     * )
      */
     private $model;
 
     /**
-     * @ORM\Column(type="integer", length=4)
+     * @ORM\Column(type="date", length=4, nullable=true)
+     * @Assert\Date()
      */
     private $year;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", length=25, nullable=false)
+     * @Assert\Type("string")
      */
     private $body;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", length=25, nullable=false)
+     * @Assert\Type("string")
      */
     private $fuel;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", length=25, nullable=false)
      */
     private $engine;
 
     /**
-     * @ORM\Column(type="integer", length=4)
+     * @ORM\Column(type="integer", nullable=false)
+     * @Assert\Range(
+     *     min = 0,
+     *     max = 1000,
+     *     minMessage = "Engine power cannot be negative.",
+     *     maxMessage = "Engine power is too high."
+     * )
      */
     private $power;
 
     /**
-     * @ORM\Column(type="string", length=25)
+     * @ORM\Column(type="string", length=255, nullable=false)
+     * @Assert\Type("string")
      */
     private $gearbox;
 
     /**
-     * @ORM\Column(type="integer", length=25)
+     * @ORM\Column(type="integer", length=25, nullable=false)
      */
     private $mileage;
 
