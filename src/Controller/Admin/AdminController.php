@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Form\MassEmailType;
+use App\Entity\Currency;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -119,5 +120,63 @@ class AdminController extends Controller
         ]);
     }
 
+	    /**
+     *
+     * @Route("/admin/updatecurrencies", name="update_currencies")
+     * @Method("GET")
+     */
+    public function updateCurrencies(){
+
+
+        $jsonContent = file_get_contents("http://www.floatrates.com/daily/eur.json");
+        $currencies = json_decode($jsonContent, true);
+        $entityManager = $this->getDoctrine()->getManager();
+        $status = "Failed";
+
+        $cur = $entityManager->getRepository(Currency::class)->findAll();
+        foreach ($cur as $c)
+        $entityManager->remove($c);
+        $entityManager->flush();
+        foreach ($currencies as $currency)
+        {
+
+            $currencyObject = new Currency();
+            $currencyObject ->setName($currency['name']);
+            $currencyObject ->setAlphaCode($currency['alphaCode']);
+            $currencyObject ->setCode($currency['code']);
+            $currencyObject ->setDate($currency['date']);
+            $currencyObject ->setInverseRate($currency['inverseRate']);
+            $currencyObject ->setNumericCode($currency['numericCode']);
+            $currencyObject ->setRate($currency['rate']);
+
+            $entityManager->persist($currencyObject);
+            $entityManager->flush();
+
+
+            $status = "Success";
+            $this->addFlash(
+                'notice',
+                'Currencies updated successfully'
+            );
+        }
+
+        return $this->render('admin/updatecurrencies.html.twig');
+    }
+
+    /**
+     *
+     * @Route("/admin/currencies", name="currencies")
+     * @Method("GET")
+     */
+    public function showCurrencies(){
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $cur = $entityManager->getRepository(Currency::class)->findAll();
+
+        return $this->render('admin/currencies.html.twig', [
+            'currencies' => $cur,
+        ]);
+    }
 
 }
