@@ -1,0 +1,4 @@
+{{ include('web/_delete_post_confirmation.html.twig') }}
+<form action="{{ url('delete_car', {id: car.id}) }}" method="post" data-confirmation="true" id="delete-form">
+    <input type="hidden" name="token" value="{{ csrf_token('delete') }}" />
+</form>

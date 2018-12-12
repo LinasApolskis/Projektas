@@ -92,6 +92,7 @@ class Car
     {
         $this->visits = new ArrayCollection();
         $this->services = new ArrayCollection();
+        $this->serviced = 0;
     }
     public function getID()
     {

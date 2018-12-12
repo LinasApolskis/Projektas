@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Form\MassEmailType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,7 +80,44 @@ class AdminController extends Controller
 
         return $this->redirectToRoute('admin_list_user');
     }
+    /**
+     * @Route("/admin/massEmail", name="admin_mass_email")
+     * @Method({"GET", "POST"})
+     */
+    public function massEmail(Request $request,  \Swift_Mailer $mailer){
 
+        $form = $this->createForm(MassEmailType::class);
+        $form->handleRequest($request);
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        $mess = $form->get('message')->getData();
+        foreach ($users as $user){
+
+            if ($user) {
+                $status = true;
+                $message = (new \Swift_Message('Mass email from ADMIN'))
+                    ->setFrom('thelincius@gmail.com')
+                    ->setTo($user->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'admin/massEmailForm.html.twig',
+                            array(
+                                'message' => $mess,
+                                'username' => $user->getUsername()
+                            )
+                        ),
+                        'text/html'
+
+                    );
+                $mailer->send($message);
+            }
+            else
+                $status = false;
+        }
+        return $this->render('admin/massEmail.html.twig', [
+            'form'=>$form->createView(),
+            'action' => $status
+        ]);
+    }
 
 
 }
