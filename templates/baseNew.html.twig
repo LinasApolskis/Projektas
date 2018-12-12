@@ -40,6 +40,7 @@
                 {% endif %}
                 {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                     <a class="nav-link" href="{{ path('profile', { 'id': app.user.id }) }}">My profile</a>
+                    <a class="nav-link" href="{{ path('user_edit', { 'id': app.user.id }) }}">My details</a>
 
                     <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false">Cars</a>
                     <ul class="collapse list-unstyled" id="pageSubmenu1">

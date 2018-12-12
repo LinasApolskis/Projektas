@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,24 +22,31 @@ class User implements AdvancedUserInterface, \Serializable
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=25, unique=true)
+     * @ORM\Column(name="username", type="string", length=255, nullable=false, unique=true)
+     * @Assert\Type("string")
      */
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     * @Assert\Length(
+     *     min=6,
+     *     minMessage = "Password must be at least {{ limit }} characters long"
+     * )
      */
     private $password;
 
     private $plainPassword;
 
     /**
-     * @ORM\Column(type="string", length=254, unique=true)
+     * @ORM\Column(name="email", type="string", length=255, nullable=false, unique=true)
+     * @Assert\Email()
      */
     private $email;
 
     /**
-     * @ORM\Column(name="is_active", type="boolean")
+     * @ORM\Column(type="boolean")
+     * @Assert\Type("bool")
      */
     private $isActive;
 
