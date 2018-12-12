@@ -58,9 +58,44 @@
                 {% endif %}
 
                 {% if is_granted('ROLE_ADMIN') %}
+                <p class="h3">Worker Menu</p>
+            <li> <a class="nav-link" href="{{ path('agenda') }}">Agenda</a> </li>
+            <li>
+                <a href="#pageSubmenu4" data-toggle="collapse" aria-expanded="false">Comments</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu4">
+                    <a class="nav-link" href="{{ path('addComment') }}">Add comment</a>
+                    <a class="nav-link" href="{{ path('modifyComment') }}">Read/Delete/Modify Comment</a>
+                    {#<li><a href="#">Page 3</a></li>#}
+                </ul>
+            </li>
+            <li>
+                <a href="#pageSubmenu5" data-toggle="collapse" aria-expanded="false">Visits</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu5">
+                    <a class="nav-link" href="{{ path('visit_new') }}">Register a visit</a>
+                    <a class="nav-link" href="{{ path('car_list') }}">Visit list</a>
+                    {#<li><a href="#">Page 3</a></li>#}
+                </ul>
+            </li>
+            {#<a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false">Cars</a>#}
+            {#<ul class="collapse list-unstyled" id="pageSubmenu1">#}
+            {#<a class="nav-link" href="{{ path('car_new') }}">Add a car</a>#}
+            {#<a class="nav-link" href="{{ path('car_list') }}">Cars status</a>#}
+            {#<li><a href="#">Page 3</a></li>#}
+            {#</ul>#}
+
+            {#<a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false">Visits</a>#}
+            {#<ul class="collapse list-unstyled" id="pageSubmenu2">#}
+            {#<a class="nav-link" href="{{ path('visit_new') }}">Register a visit</a>#}
+            {#<a class="nav-link" href="{{ path('car_list') }}">Visit list</a>#}
+            {#<li><a href="#">Page 3</a></li>#}
+            {#</ul>#}
+            {% endif %}
+
+                {% if is_granted('ROLE_ADMIN') %}
                 <p class="h3">Admin Menu</p>
                     <li> <a class="nav-link" href="{{ path('admin_visits') }}">Visits List</a> </li>
                     <li> <a class="nav-link" href="{{ path('admin_list_user') }}">User List</a> </li>
+                    <li> <a class="nav-link" href="{{ path('admin_mass_email') }}">Mass Email</a> </li>
                     <li>
                     <a href="#pageSubmenu3" data-toggle="collapse" aria-expanded="false">Service</a>
                     <ul class="collapse list-unstyled" id="pageSubmenu3">

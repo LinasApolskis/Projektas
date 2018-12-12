@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Car;
 use App\Form\CarType;
 use App\Entity\User;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 
 class CarController extends Controller
@@ -47,7 +49,7 @@ class CarController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $car->setServiced(0);
+            //$car->setServiced(0);
             // 4) save the User!
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $user->addCar($car);
@@ -68,7 +70,24 @@ class CarController extends Controller
             'web/cars_new.html.twig',
             array('form' => $form->createView())
         );
-
-
     }
+        /**
+         * @Route("car/{id}/delete", name="delete_car")
+         * @Method({"GET", "POST"})         *
+         */
+        public function deleteCar(Request $request, Car $car): Response
+    {
+//        if (!$this->isCsrfTokenValid('delete', $request->request->get('token'))) {
+//            return $this->redirectToRoute('car_list');
+//        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($car);
+        $em->flush();
+
+        $this->addFlash('success', 'Service deleted');
+
+        return $this->redirectToRoute('car_list');
+    }
+
 }
